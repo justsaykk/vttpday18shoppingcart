@@ -13,7 +13,7 @@
         <h1>Hello, <span data-th-text="${user}"></span></h1>
         <form method="POST" action="/cart/addItem">
             <input type="hidden" name="user" data-th-value="${user}">
-            <input type="hidden" name="cart" data-th-value="${cart}">
+            <!-- <input type="hidden" name="cart" data-th-value="${cart}"> -->
 
             <label for="item">Item</label>
             <input type="text" name="item" id="item">
@@ -22,9 +22,12 @@
     </div>
     <div>
         <h2>List of Items</h2>
-        <table>
-            <tr data-th-each="c: ${cart}">
-                <td data-th-text="${c}"></td>
+        <table data-th-each="c: ${cart}">
+            <tr>
+                <td>Fruits</td>
+            </tr>
+            <tr>
+                <p data-th-text="${c}"></p>
             </tr>
         </table>
 

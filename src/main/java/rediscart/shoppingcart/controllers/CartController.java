@@ -20,13 +20,16 @@ public class CartController {
     @Autowired
     private CartService cartSvc;
 
-    @PostMapping
+    @PostMapping(produces = "text/html")
     public String redirectToCart(@RequestBody MultiValueMap<String, String> form, Model model) {
         // Null Check
         String user = form.getFirst("user");
         if (isNull(user)) {
             user = "annonymous";
         }
+        List<String> cartList = cartSvc.getCart(user);
+
+        model.addAttribute("cart", cartList);
         model.addAttribute("user", user);
         return "cart";
     }
@@ -35,21 +38,12 @@ public class CartController {
     public String addItems(
             @RequestBody MultiValueMap<String, String> form, Model model) {
         String user = form.getFirst("user");
-        String cart = form.getFirst("contents");
         String item = form.getFirst("item");
-        String newCart = "";
 
-        if (!isNull(cart)) {
-            List<String> list = new LinkedList<>();
-            list = cartSvc.makeList(cart);
-            list.add(item);
-            newCart = cartSvc.makeString(list);
-        } else {
-            newCart = item;
-        }
+        cartSvc.addItem(user, item);
+        List<String> newCartList = cartSvc.getCart(user);
 
-        // Populate the user via hidden form fields
-        model.addAttribute("cart", newCart);
+        model.addAttribute("cart", newCartList);
         model.addAttribute("user", user);
         return "cart";
     }
